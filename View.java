@@ -1,9 +1,40 @@
 
-// This is the View
-// Its only job is to display what the user sees
-// It performs no calculations, but instead passes
-// information entered by the user to whomever needs
-// it. 
+/**
+ * Copyright (c) 2015 Tim Lindquist,
+ * Software Engineering,
+ * Arizona State University at the Polytechnic campus
+ * <p/>
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation version 2
+ * of the License.
+ * <p/>
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty or fitness for a particular purpose.
+ * <p/>
+ * Please review the GNU General Public License at:
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ * see also: https://www.gnu.org/licenses/gpl-faq.html
+ * so you are aware of the terms and your rights with regard to this software.
+ * Or, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,USA
+ * <p/>
+ * Purpose: Sample Java Swing controller class. FolderBrowserGUI constructs the view components
+ * for a sample GUI. This class is extends the GUI to provide the control functionality.
+ * When the user does a tree node selection, this valueChanged is called, but virtue of being a
+ * TreeSelectionListener and adding itself as a listerner. FolderBrowser defines the call-backs
+ * for the JButton as well.
+ * It contains sample control functions that respond to button clicks and tree
+ * selects.
+ * This software is meant to run on Debian Wheezy Linux
+ * <p/>
+ * Ser321 Principles of Distributed Software Systems
+ * see http://pooh.poly.asu.edu/Ser321
+ * @author Tim Lindquist (Tim.Lindquist@asu.edu) CIDSE - Software Engineering,
+ *                       IAFSE, ASU at the Polytechnic campus
+ * @file    FolderBrowserGUI.java
+ * @date    July, 2015
+ **/
 
 import java.awt.event.ActionListener;
 
@@ -12,157 +43,226 @@ import java.awt.Font;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class View extends JFrame{
+public class View extends JFrame {
 
-	private JTextField subjectTextField  = new JTextField(10);
+	/**
+	 * Json serialization
+	 */
+	private static final long serialVersionUID = -5258674991466487784L;
+
+	private JLabel lblMessagesForEric = new JLabel("Messages for Eric Sandlin:");
+	private JTextField subjectTextField = new JTextField(10);
 	private JLabel subjectLabel = new JLabel("Subject:");
+	private JLabel toLabel = new JLabel("To:");
+	private JLabel fromLabel = new JLabel("From:");
+	private JLabel dateLabel = new JLabel("Date:");
+	private JLabel statusLabel = new JLabel("Status:");
 	private JTextField toTextField = new JTextField(10);
 	private JButton replyButton = new JButton("Reply");
+	private JButton sendButton = new JButton("Send Text");
+	private JButton deleteButton = new JButton("Delete");
+	private JButton cypherButton = new JButton("Send Cypher");
 	private JTextField dateTextField = new JTextField(10);
-	private JTextField fromTextField;
-	private JTextField messageTextField;
-	private JTextField statusTextField;
-	
-	View(){
-		
+	private JTextField fromTextField = new JTextField(10);
+	private JTextField messageTextField = new JTextField();
+	private JTextField statusTextField = new JTextField();
+	private JTree messageTree = new JTree();
+
+	View() {
+
 		// Sets up the view and adds the components
-		
-		JPanel calcPanel = new JPanel();
-		
+
+		JPanel Panel = new JPanel();
+
+		this.setTitle("Eric Sandlins Message");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(613, 336);
-		calcPanel.setLayout(null);
+		Panel.setLayout(null);
 		subjectTextField.setBounds(275, 93, 116, 22);
-		
-		calcPanel.add(subjectTextField);
+		Panel.add(subjectTextField);
 		subjectLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		subjectLabel.setBounds(211, 95, 52, 16);
-		calcPanel.add(subjectLabel);
-		toTextField.setBounds(275, 43, 116, 22);
-		calcPanel.add(toTextField);
-		replyButton.setBounds(205, 5, 85, 25);
-		calcPanel.add(replyButton);
-		dateTextField.setBounds(450, 93, 116, 22);
-		calcPanel.add(dateTextField);
-		
-		getContentPane().add(calcPanel);
-		
-		fromTextField = new JTextField(10);
-		fromTextField.setBounds(450, 44, 116, 22);
-		calcPanel.add(fromTextField);
-		
-		JLabel toLabel = new JLabel("To:");
-		toLabel.setBounds(243, 46, 20, 16);
-		calcPanel.add(toLabel);
-		
-		JLabel fromLabel = new JLabel("From:");
-		fromLabel.setBounds(403, 47, 35, 16);
-		calcPanel.add(fromLabel);
-		
-		JLabel dateLabel = new JLabel("Date:");
-		dateLabel.setBounds(403, 96, 35, 16);
-		calcPanel.add(dateLabel);
-		
-		JButton sendButton = new JButton("Send Text");
-		sendButton.setBounds(299, 5, 104, 25);
-		calcPanel.add(sendButton);
-		
-		JButton deleteButton = new JButton("Delete");
-		deleteButton.setBounds(108, 5, 85, 25);
-		calcPanel.add(deleteButton);
-		
-		JButton cypherButton = new JButton("Send Cypher");
-		cypherButton.setBounds(415, 5, 116, 25);
-		calcPanel.add(cypherButton);
-		
-		messageTextField = new JTextField();
-		messageTextField.setBounds(194, 127, 325, 81);
-		calcPanel.add(messageTextField);
-		messageTextField.setColumns(10);
-		
-		statusTextField = new JTextField();
-		statusTextField.setColumns(10);
-		statusTextField.setBounds(293, 231, 226, 33);
-		calcPanel.add(statusTextField);
-		
-		JLabel statusLabel = new JLabel("Status:");
+		Panel.add(subjectLabel);
 		statusLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		statusLabel.setBounds(233, 231, 57, 33);
-		calcPanel.add(statusLabel);
-		
-		JLabel lblMessagesForEric = new JLabel("Messages for Eric Sandlin:");
+		Panel.add(statusLabel);
+		toLabel.setBounds(243, 46, 20, 16);
+		Panel.add(toLabel);
+		fromLabel.setBounds(403, 47, 35, 16);
+		Panel.add(fromLabel);
+		dateLabel.setBounds(403, 96, 35, 16);
+		Panel.add(dateLabel);	
+		messageTextField.setBounds(194, 127, 325, 81);
+		Panel.add(messageTextField);
+		messageTextField.setColumns(10);
+		toTextField.setBounds(275, 43, 116, 22);
+		Panel.add(toTextField);
+		fromTextField.setBounds(450, 44, 116, 22);
+		Panel.add(fromTextField);
+		replyButton.setBounds(205, 5, 85, 25);
+		Panel.add(replyButton);
+		sendButton.setBounds(299, 5, 104, 25);
+		Panel.add(sendButton);
+		deleteButton.setBounds(108, 5, 85, 25);
+		Panel.add(deleteButton);
+		cypherButton.setBounds(415, 5, 116, 25);
+		Panel.add(cypherButton);
+		dateTextField.setBounds(450, 93, 116, 22);
+		Panel.add(dateTextField);
+		statusTextField.setColumns(10);
+		statusTextField.setBounds(293, 231, 226, 33);
+		Panel.add(statusTextField);
 		lblMessagesForEric.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblMessagesForEric.setBounds(12, 47, 156, 16);
-		calcPanel.add(lblMessagesForEric);
-		
-		JTree messageTree = new JTree();
-		messageTree.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("Messages") {
-				{
-					DefaultMutableTreeNode node_1;
-					node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 22:54 1894");
-						node_1.add(new DefaultMutableTreeNode("Get your homework done."));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 22:54 1999");
-						node_1.add(new DefaultMutableTreeNode("Don't forget to study."));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 21:24 2012");
-						node_1.add(new DefaultMutableTreeNode("Work Work Work Work Work."));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 20:50 2015");
-						node_1.add(new DefaultMutableTreeNode("I can do this, yes I can."));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 01:14 2019");
-						node_1.add(new DefaultMutableTreeNode("Maybe I need help."));
-					add(node_1);
-				}
+		Panel.add(lblMessagesForEric);
+		messageTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Messages") {
+			{
+				DefaultMutableTreeNode node_1;
+				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 22:54 1894");
+				node_1.add(new DefaultMutableTreeNode("Get your homework done."));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 22:54 1999");
+				node_1.add(new DefaultMutableTreeNode("Don't forget to study."));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 21:24 2012");
+				node_1.add(new DefaultMutableTreeNode("Work Work Work Work Work."));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 20:50 2015");
+				node_1.add(new DefaultMutableTreeNode("I can do this, yes I can."));
+				add(node_1);
+				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 01:14 2019");
+				node_1.add(new DefaultMutableTreeNode("Maybe I need help."));
+				add(node_1);
 			}
-		));
+		}));
 		messageTree.setBounds(12, 76, 170, 188);
-		calcPanel.add(messageTree);
+		Panel.add(messageTree);
 		
+		getContentPane().add(Panel);
 		// End of setting up the components --------
-		
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getSubjectTextField() {
+		return subjectTextField;
+	}
+
+	/**
+	 * @param subjectTextField
+	 */
+	public void setSubjectTextField(JTextField subjectTextField) {
+		this.subjectTextField = subjectTextField;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getToTextField() {
+		return toTextField;
+	}
+
+	/**
+	 * @param toTextField
+	 */
+	public void setToTextField(JTextField toTextField) {
+		this.toTextField = toTextField;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getDateTextField() {
+		return dateTextField;
+	}
+
+	/**
+	 * @param dateTextField
+	 */
+	public void setDateTextField(JTextField dateTextField) {
+		this.dateTextField = dateTextField;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getFromTextField() {
+		return fromTextField;
+	}
+
+	/**
+	 * @param fromTextField
+	 */
+	public void setFromTextField(JTextField fromTextField) {
+		this.fromTextField = fromTextField;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getMessageTextField() {
+		return messageTextField;
+	}
+
+	/**
+	 * @param messageTextField
+	 */
+	public void setMessageTextField(JTextField messageTextField) {
+		this.messageTextField = messageTextField;
+	}
+
+	/**
+	 * @return
+	 */
+	public JTextField getStatusTextField() {
+		return statusTextField;
+	}
+
+	/**
+	 * @param statusTextField
+	 */
+	public void setStatusTextField(JTextField statusTextField) {
+		this.statusTextField = statusTextField;
+	}
+
+	/*
+	 * If the calculateButton is clicked execute a method in the Controller
+	 * named actionPerformed
+	 */
+	void addReplyListener(ActionListener listenForReplyButton) {
+		replyButton.addActionListener(listenForReplyButton);
 	}
 	
-	public int getFirstNumber(){
-		
-		return Integer.parseInt(subjectTextField.getText());
-		
+	/*
+	 * If the calculateButton is clicked execute a method in the Controller
+	 * named actionPerformed
+	 */
+	void addDeleteListener(ActionListener listenForDeleteButton) {
+		deleteButton.addActionListener(listenForDeleteButton);
 	}
 	
-	public int getSecondNumber(){
-		
-		return Integer.parseInt(toTextField.getText());
-		
+	/*
+	 * If the calculateButton is clicked execute a method in the Controller
+	 * named actionPerformed
+	 */
+	void addSendListener(ActionListener listenForSendButton) {
+		sendButton.addActionListener(listenForSendButton);
 	}
 	
-	public int getCalcSolution(){
-		
-		return Integer.parseInt(dateTextField.getText());
-		
+	/*
+	 * If the calculateButton is clicked execute a method in the Controller
+	 * named actionPerformed
+	 */
+	void addCypherListener(ActionListener listenForCypherButton) {
+		cypherButton.addActionListener(listenForCypherButton);
 	}
-	
-	public void setCalcSolution(int solution){
-		
-		dateTextField.setText(Integer.toString(solution));
-		
-	}
-	
-	// If the calculateButton is clicked execute a method
-	// in the Controller named actionPerformed
-	
-	void addCalculateListener(ActionListener listenForCalcButton){
-		
-		replyButton.addActionListener(listenForCalcButton);
-		
-	}
-	
+
 	// Open a popup that contains the error message passed
-	
-	void displayErrorMessage(String errorMessage){
-		
+
+	void displayErrorMessage(String errorMessage) {
+
 		JOptionPane.showMessageDialog(this, errorMessage);
-		
+
 	}
 }

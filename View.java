@@ -37,13 +37,15 @@
  **/
 
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import java.awt.Font;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class View extends JFrame {
+public class View extends JFrame implements java.io.Serializable {
 
 	/**
 	 * Json serialization
@@ -66,7 +68,7 @@ public class View extends JFrame {
 	private JTextField fromTextField = new JTextField(10);
 	private JTextField messageTextField = new JTextField();
 	private JTextField statusTextField = new JTextField();
-	private JTree messageTree = new JTree();
+	JTree messageTree = new JTree();
 
 	View() {
 
@@ -116,6 +118,11 @@ public class View extends JFrame {
 		lblMessagesForEric.setBounds(12, 47, 156, 16);
 		Panel.add(lblMessagesForEric);
 		messageTree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Messages") {
+			/**
+			 * Json seria
+			 */
+			private static final long serialVersionUID = 627512243383695358L;
+
 			{
 				DefaultMutableTreeNode node_1;
 				node_1 = new DefaultMutableTreeNode("Eric Sandlin: Mon 16 Sept 22:54 1894");
@@ -138,6 +145,8 @@ public class View extends JFrame {
 		messageTree.setBounds(12, 76, 170, 188);
 		Panel.add(messageTree);
 		
+		
+		
 		getContentPane().add(Panel);
 		// End of setting up the components --------
 	}
@@ -145,84 +154,86 @@ public class View extends JFrame {
 	/**
 	 * @return
 	 */
-	public JTextField getSubjectTextField() {
+	protected JTextField getSubjectTextField() {
 		return subjectTextField;
 	}
 
 	/**
 	 * @param subjectTextField
 	 */
-	public void setSubjectTextField(JTextField subjectTextField) {
+	protected void setSubjectTextField(JTextField subjectTextField) {
 		this.subjectTextField = subjectTextField;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getToTextField() {
+	protected JTextField getToTextField() {
 		return toTextField;
 	}
 
 	/**
 	 * @param toTextField
 	 */
-	public void setToTextField(JTextField toTextField) {
+	protected void setToTextField(JTextField toTextField) {
 		this.toTextField = toTextField;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getDateTextField() {
+	protected JTextField getDateTextField() {
+		DateFormat format = new SimpleDateFormat("MM/DD/YYYY");
+		JFormattedTextField dateTextField = new JFormattedTextField(format);
 		return dateTextField;
 	}
 
 	/**
 	 * @param dateTextField
 	 */
-	public void setDateTextField(JTextField dateTextField) {
+	protected void setDateTextField(JTextField dateTextField) {
 		this.dateTextField = dateTextField;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getFromTextField() {
+	protected JTextField getFromTextField() {
 		return fromTextField;
 	}
 
 	/**
 	 * @param fromTextField
 	 */
-	public void setFromTextField(JTextField fromTextField) {
+	protected void setFromTextField(JTextField fromTextField) {
 		this.fromTextField = fromTextField;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getMessageTextField() {
+	protected JTextField getMessageTextField() {
 		return messageTextField;
 	}
 
 	/**
 	 * @param messageTextField
 	 */
-	public void setMessageTextField(JTextField messageTextField) {
+	protected void setMessageTextField(JTextField messageTextField) {
 		this.messageTextField = messageTextField;
 	}
 
 	/**
 	 * @return
 	 */
-	public JTextField getStatusTextField() {
+	protected JTextField getStatusTextField() {
 		return statusTextField;
 	}
 
 	/**
 	 * @param statusTextField
 	 */
-	public void setStatusTextField(JTextField statusTextField) {
+	protected void setStatusTextField(JTextField statusTextField) {
 		this.statusTextField = statusTextField;
 	}
 
